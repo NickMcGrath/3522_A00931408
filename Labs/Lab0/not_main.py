@@ -1,0 +1,1 @@
+print("MyModule's __name__: {0}".format(__name__))
