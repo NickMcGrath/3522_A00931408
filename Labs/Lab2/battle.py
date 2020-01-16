@@ -69,6 +69,15 @@ class Character:
             return True
         return False
 
+    def attack(self):
+        """
+        Calculate and return the total damage.
+        :return: int return the amount of damage done.
+        """
+        if random.random() < self.chance_critical:
+            return self.strength * 2
+        return self.strength
+
     def __str__(self):
         """
         Show Character current stats.
@@ -100,15 +109,14 @@ class BattleSimulator:
         :param taker: a character object
         :return:
         """
-        critical_multi = 1
         # checks if the attacker hits a critical
-        if random.random() < attacker.chance_critical:
-            critical_multi *= 2
-            print(f'BIG HIT! critical multi at: {critical_multi}')
+        damage = attacker.attack()
+        if damage != attacker.strength:
+            print(f'BIG HIT! critical {damage} damage!')
         print(f'{attacker.name} hits '
-              f' {attacker.strength * critical_multi} hp!')
+              f' {damage} hp!')
         # checks if the taker dodges the attack
-        if taker.take_damage(attacker.strength * critical_multi):
+        if taker.take_damage(damage):
             print(f'{taker.name} takes a hit! ouch.'
                   f' {taker.name} has '
                   f'{taker.health} health remaining')
@@ -159,7 +167,8 @@ def main():
     Creates two characters and simulates a battle.
     """
     character1 = generate_random_character("Dr. Bones", 100, 60, 15, 5)
-    character2 = generate_random_character("zzzQuickScopeszzz", 100, 60, 15, 5)
+    character2 = generate_random_character("zzzQuickScopeszzz", 100, 60,
+                                           15, 5)
     battle = BattleSimulator(character1, character2)
     battle.simulate()
 
