@@ -167,7 +167,7 @@ def main():
     Creates two characters and simulates a battle.
     """
     character1 = generate_random_character("Dr. Bones", 100, 60, 15, 5)
-    character2 = generate_random_character("zzzQuickScopeszzz", 100, 60,
+    character2 = generate_random_character("Mr. Meeseeks", 100, 60,
                                            15, 5)
     battle = BattleSimulator(character1, character2)
     battle.simulate()
