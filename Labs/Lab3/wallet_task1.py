@@ -71,7 +71,7 @@ class Wallet:
         """Overridden to print wallet attributes. """
         str = f'Owner: {self._owner}, cards: ['
         for card in self._cards.values():
-            str += f'{card.__str__()} | '
+            str += f'{card.__str__()}| '
         str += ']'
         return str
 
@@ -121,17 +121,17 @@ def main():
     p1 = Person('big bub', date(1996, 4, 9))
     w1 = Wallet(p1)
 
-    c1 = Card('Black card', date(2020, 1, 1), 'ARD12345')
-    c2 = Card('Yellow card', date(2020, 1, 1), 'ARD54321')
+    c1 = Card('Black card', date(2020, 1, 1), 'ARD123456')
+    c2 = Card('Yellow card', date(2020, 1, 1), 'ARD654321')
     print(c1, c2)
     w1.add(c1)
     w1.add(c2)
 
     print(w1)
-    print(w1.search('ARD12345'))
-    print(w1.remove('ARD12345'))
-    print(w1.search('ARD12345'))
-    print(w1.search('ARD54321').access_card())
+    print(w1.search('ARD123456'))
+    print(w1.remove('ARD123456'))
+    print(w1.search('ARD123456'))
+    # print(w1.search('ARD54321').access_card())
 
 
 if __name__ == '__main__':
