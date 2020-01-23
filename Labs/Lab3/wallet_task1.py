@@ -69,8 +69,11 @@ class Wallet:
 
     def __str__(self):
         """Overridden to print wallet attributes. """
-
-        return f'Owner: {self._owner}, cards {self._cards}'
+        str = f'Owner: {self._owner}, cards: ['
+        for card in self._cards.values():
+            str += f'{card.__str__()} | '
+        str += ']'
+        return str
 
 
 class Card:
