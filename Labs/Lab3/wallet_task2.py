@@ -1,9 +1,8 @@
-from datetime import date
-
 """
 This module creates a Wallet and adds Cards to the Wallet.
 """
-
+from datetime import date
+import abc
 
 class Person:
     """
@@ -76,7 +75,7 @@ class Wallet:
         return str
 
 
-class Card:
+class Card(abc.ABC):
     """
     A Card class that models a generic card with name, expiry, and id.
     """
@@ -92,6 +91,7 @@ class Card:
         self._expiry_date = expiry_date
         self._id_number = id_number
 
+    @abc.abstractmethod
     def access_card(self):
         """
         Checks if card can be accessed.
