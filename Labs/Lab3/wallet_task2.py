@@ -195,6 +195,7 @@ def main():
 
     c1 = IDCard('Black card', date(2022, 1, 1), 'ARD123456', date(1996, 1, 1))
     c2 = CreditCard('Yellow card', date(2022, 1, 1), 'ARD654321', 999, 123)
+    # c3 = Card('Black card', date(2022, 1, 1), 'ARD123456')
     print(c1, c2)
     w1.add(c1)
     w1.add(c2)

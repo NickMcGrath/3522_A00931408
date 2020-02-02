@@ -12,20 +12,23 @@ class Budget:
         Initializes a Budget with the balance of the budget.
         :param balance: float
         """
+        self.total = balance
         self.balance = balance
         self.transactions = []
-        self.type = type
+        self.locked = False
 
-    def add_transaction(self, amount, date_time=datetime.today()):
+    def add_transaction(self, amount, shop, date_time=datetime.today()):
         """
         Adds a transaction to the budget.
         :param amount: float
         :param date_time: datetime
         :return: bool, if transaction was added
         """
-        if self.balance + amount >= 0:
-            self.transactions.append(Transaction(date_time, amount))
-            self.balance += amount
-            return True
-        else:
-            return False
+        self.balance += amount
+        self.transactions.append(Transaction(date_time, amount, shop,
+                                             self.balance))
+
+    def __str__(self):
+        return f'Amount Spent: {self.total - self.balance}, Balance: ' \
+               f'{self.balance}, Total allocated: {self.total}, ' \
+               f'locked: {self.locked}'

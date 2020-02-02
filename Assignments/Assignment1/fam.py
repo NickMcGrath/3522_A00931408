@@ -1,8 +1,4 @@
-from bank_account import BankAccount
-from user import *
 from moderator import Moderator
-from datetime import date
-from budget import Budget
 from budget_types import BudgetTypes
 
 
@@ -12,92 +8,97 @@ class Fam():
     spending. Fam uses a text based interface.
     """
 
-    def __init__(self):
-        """
-        Initialize a Fam with a empty moderator.
-        """
-        self.moderator = None
+    def __init__(self, moderator):
+        """Initialize a Fam with a moderator."""
+        self.moderator = moderator
 
     def main_menu(self):
-        """
-        Display a main menu and deal with user input.
-        """
+        """Display a main menu and deal with user input."""
         option = -1
         while (option != 0):
-            print('Welcome to the Main Menu!')
-            print('----< F-A-M Accounting  >---- ')
+            self.moderator.notify()
+            print('----<   Main Menu   >---- ')
             print('Enter a option:')
             print('0: Exit')
             print('1: View Budgets')
             print('2: Record a transaction')
             print('3: View Transactions by Budget')
             print('4: View Bank Account Details')
-
-            option = int(input())
+            while True:
+                try:
+                    option = int(input('> '))
+                except ValueError:
+                    print('Please enter a option (integer value)')
+                    continue
+                else:
+                    break
             if option == 1:
-                pass
+                self.moderator.view_budgets(BudgetTypes)
             elif option == 2:
                 self.record_transaction_menu()
             elif option == 3:
-                pass
+                self.transactions_by_budget_menu()
             elif option == 4:
-                pass
+                self.moderator.view_bank_account_details()
+            else:
+                print('Didnt get that, Please enter a option (integer value)')
         print('Thanks for using Dank Accounting')
 
+    def transactions_by_budget_menu(self):
+        """Displays a transaction sub menu and deals with user input."""
+        while True:
+            print('----<   Transaction Menu   >---- ')
+            print('View all transactions in:')
+            print('0: Back to main menu')
+            print('1: Games and Entertainment')
+            print('2: Clothing and Accessories')
+            print('3: Eating Out')
+            print('4: Miscellaneous')
+            option = -1
+            while True:
+                try:
+                    option = int(input('> '))
+                    if option == 0:
+                        return
+                    self.moderator.view_budget(BudgetTypes(option))
+                except ValueError:
+                    print('Please enter a option (integer value)')
+                    continue
+                else:
+                    break
+
     def record_transaction_menu(self):
-        """
-        Display options for a transaction and deal with user input.
-        """
-        self.moderator.notification_check()
+        """Display options for a transaction and deal with user input."""
+        print('----<   Record Transaction   >---- ')
         print('Enter a Transaction type:')
+        print('0: Go back to main menu')
         print('1: Games and Entertainment')
         print('2: Clothing and Accessories')
         print('3: Eating Out')
         print('4: Miscellaneous')
-        option = int(input())
-        while (option != 0):
-            amount = float(input('How many Bones? +/-:'))
-            if option == 1:
-                print(self.moderator.transaction(amount,
-                                                 BudgetTypes.GAMES_AND_ENTERTAINMENT))
+        option = -1
+        while True:
+            try:
+                option = int(input('> '))
+                amount = float(input('How many Bones? +/-:'))
+                shop = input('Shop: ')
+                print(self.moderator.transaction(amount, BudgetTypes(option),
+                                                 shop))
+            except ValueError:
+                print('Please check parameters!')
+                continue
+            else:
                 break
-            elif option == 2:
-                print(self.moderator.transaction(amount,
-                                                 BudgetTypes.CLOTHING_AND_ACCESSORIES))
-                break
-            elif option == 3:
-                print(self.moderator.transaction(amount,
-                                                 BudgetTypes.EATING_OUT))
-                break
-            elif option == 4:
-                print(self.moderator.transaction(amount,
-                                                 BudgetTypes.MISCELLANEOUS))
-                break
-
-            option = int(input())
-
-    def load_test_user(self):
-        """
-        Creates a test user with budgets and a moderator to deal with the user.
-        Applies moderator to instance variable.
-        """
-        ba = BankAccount("Account number here", "Bank name there", 99)
-        user = User("Nick McGrath", date(1996, 4, 9), ba)
-        self.moderator = Moderator(user)
-        budget_dic = {}
-        budget_dic[BudgetTypes.GAMES_AND_ENTERTAINMENT] = Budget(100)
-        budget_dic[BudgetTypes.MISCELLANEOUS] = Budget(100)
-        budget_dic[BudgetTypes.EATING_OUT] = Budget(100)
-        budget_dic[BudgetTypes.CLOTHING_AND_ACCESSORIES] = Budget(100)
-        self.moderator.set_budget_dic(budget_dic)
+        if option == 0:
+            return
 
 
 def main():
-    """
-    Program Driver.
-    """
-    driver = Fam()
-    driver.load_test_user()
+    """Program Driver."""
+    driver = Fam(Moderator())
+
+    driver.moderator.load_test_user()
+    # driver.moderator.load_user()
     driver.main_menu()
 
 
