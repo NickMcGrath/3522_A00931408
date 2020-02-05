@@ -1,4 +1,5 @@
 import math
+import numbers
 
 
 class Vector:
@@ -33,6 +34,10 @@ class Vector:
         """Overload the + operator."""
         return Vector(b.x + self.x, b.y + self.y, b.z + self.z)
 
+    def __sub__(self, b):
+        """Overload the - operator."""
+        return Vector(self.x - b.x, self.y - b.y, self.z - b.z)
+
     def __lt__(self, b):
         """Overload the < operator."""
         return self.get_mag(self) < self.get_mag(b)
@@ -59,7 +64,12 @@ class Vector:
 
     def __mul__(self, b):
         """Overload the * operator."""
-        return Vector(b * self.x, b * self.y, b * self.z)
+        if isinstance(b, numbers.Number):
+            return Vector(b * self.x, b * self.y, b * self.z)
+        else:
+            return Vector((self.y * b.z - self.z * b.y),
+                          (self.z * b.x - self.x * b.z),
+                          (self.x * b.y - self.y * b.x))
 
     def __abs__(self):
         """Overload the abs operator."""
@@ -70,19 +80,53 @@ class Vector:
         self.x -= b.x
         self.y -= b.y
         self.z -= b.z
+        return self
 
     def __iadd__(self, b):
         """Overload the += operator."""
         self.x += b.x
         self.y += b.y
         self.z += b.z
+        return self
 
     def __imul__(self, b):
         """Overload the *= operator."""
-        self.x *= b
-        self.y *= b
-        self.z *= b
+        if isinstance(b, numbers.Number):
+            self.x *= b
+            self.y *= b
+            self.z *= b
+            return self
+        else:
+            return Vector((self.y * b.z - self.z * b.y),
+                          (self.z * b.x - self.x * b.z),
+                          (self.x * b.y - self.y * b.x))
 
     def __str__(self):
-        """Returns a string representation of the project"""
-        return f'x: {self.x}, y: {self.y}, z: {self.z}'
+        """Returns a string representation of the Vector"""
+        return f'Vector coordinates: x: {self.x}, y: {self.y}, z: {self.z}'
+
+
+def main():
+    """Testes operator functions."""
+    my_vector = Vector(34, 56, 27)
+    your_vector = Vector(25, 58, 30)
+    print(my_vector - your_vector)
+    print(my_vector + your_vector)
+    print(my_vector * your_vector)
+    print(my_vector > your_vector)
+    print(my_vector >= your_vector)
+    print(my_vector <= your_vector)
+    print(my_vector == your_vector)
+    print(my_vector != your_vector)
+    my_vector += your_vector
+    print(my_vector)
+    my_vector *= your_vector
+    print(my_vector)
+    my_vector -= your_vector
+    print(my_vector)
+    my_vector *= 2
+    print(my_vector)
+
+
+if __name__ == '__main__':
+    main()
