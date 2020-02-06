@@ -27,7 +27,11 @@ class Vector:
 
     @staticmethod
     def get_mag(a):
-        """Static method to return the magnitude at a coordinate."""
+        """
+        Static method to return the magnitude at a coordinate.
+        :param a: a Vector object
+        :return: the magnitude of the vector opject
+        """
         return math.sqrt(a.x ** 2 + a.y ** 2 + a.z ** 2)
 
     def __add__(self, b):
