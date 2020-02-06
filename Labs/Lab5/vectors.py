@@ -102,6 +102,10 @@ class Vector:
         self.z += b.z
         return self
 
+    def __rmul__(self, b):
+        """Overload the right * operator."""
+        self.__imul__(b)
+
     def __imul__(self, b):
         """Overload the *= operator."""
         if isinstance(b, numbers.Number):
@@ -126,6 +130,9 @@ def main():
     print(my_vector - your_vector)
     print(my_vector + your_vector)
     print(my_vector * your_vector)
+    print('multi time!')
+    print(my_vector)
+    print(2 * my_vector)
     print(my_vector > your_vector)
     print(my_vector >= your_vector)
     print(my_vector <= your_vector)
