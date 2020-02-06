@@ -16,6 +16,15 @@ class Vector:
         self.y = y
         self.z = z
 
+    @staticmethod
+    def get_mag(a):
+        """
+        Static method to return the magnitude at a coordinate.
+        :param a: a Vector object
+        :return: the magnitude of the vector opject
+        """
+        return math.sqrt(a.x ** 2 + a.y ** 2 + a.z ** 2)
+
     def __getitem__(self, item):
         """Returns the value corresponding to the value given."""
         if item.lower() == 'x':
@@ -25,14 +34,14 @@ class Vector:
         elif item.lower() == 'z':
             return self.z
 
-    @staticmethod
-    def get_mag(a):
-        """
-        Static method to return the magnitude at a coordinate.
-        :param a: a Vector object
-        :return: the magnitude of the vector opject
-        """
-        return math.sqrt(a.x ** 2 + a.y ** 2 + a.z ** 2)
+    def __setitem__(self, key, value):
+        """Sets the corresponding key to value given."""
+        if key.lower() == 'x':
+            self.x = value
+        elif key.lower() == 'y':
+            self.y = value
+        elif key.lower() == 'z':
+            self.z = value
 
     def __add__(self, b):
         """Overload the + operator."""
