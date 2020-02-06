@@ -3,7 +3,9 @@ import numbers
 
 
 class Vector:
-    """Vector represents a Vector with coordinates in a 3D space."""
+    """Vector represents a Vector with coordinates in a 3D space.
+    Vector is immutable meaning that after any mathimatical opertation
+    it returns a new vector."""
 
     def __init__(self, x, y, z):
         """
@@ -76,7 +78,7 @@ class Vector:
         return self.get_mag(self) != self.get_mag(b)
 
     def __mul__(self, b):
-        """Overload the * operator."""
+        """Overload the * operator. Using formula outlined in lab 5."""
         if isinstance(b, numbers.Number):
             return Vector(b * self.x, b * self.y, b * self.z)
         else:
@@ -103,11 +105,15 @@ class Vector:
         return self
 
     def __rmul__(self, b):
-        """Overload the right * operator."""
-        self.__imul__(b)
+        """
+        Overload the right * operator. Using formula outlined in lab
+        5.
+        """
+
+        return self.__imul__(b)
 
     def __imul__(self, b):
-        """Overload the *= operator."""
+        """Overload the *= operator. Using formula outlined in lab 5."""
         if isinstance(b, numbers.Number):
             self.x *= b
             self.y *= b
