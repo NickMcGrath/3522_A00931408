@@ -1,5 +1,5 @@
 from moderator import Moderator
-from budget_types import BudgetTypes
+from budget import BudgetTypes
 
 
 class Fam():

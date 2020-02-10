@@ -1,9 +1,8 @@
 from datetime import date
 
 from bank_account import BankAccount
-from budget import Budget
+from budget import Budget, BudgetTypes
 from user import User, UserAngel, TroubleMaker, Rebel
-from budget_types import BudgetTypes
 
 
 class Moderator:
