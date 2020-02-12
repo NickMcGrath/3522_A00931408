@@ -82,7 +82,9 @@ class Fam():
         while True:
             try:
                 option = int(input('> '))
-                amount = float(input('How many Bones? +/-:'))
+                amount = -float(input('How many Bones?:'))
+                if amount >= 0:
+                    raise ValueError
                 shop = input('Shop: ')
                 print(self.moderator.transaction(amount, BudgetTypes(option),
                                                  shop))

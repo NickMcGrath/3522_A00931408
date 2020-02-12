@@ -20,9 +20,9 @@ class BankAccount:
         return f'Account Name: {self.account_name}, Account Number:' \
                f' {self.account_num}, Balance: {self.balance}'
 
-    def trans_check(self, amount):
+    def balance_check(self, amount):
         return amount + self.balance >= 0
 
-    def trans(self, amount):
+    def purchase(self, amount):
         self.balance += amount
 

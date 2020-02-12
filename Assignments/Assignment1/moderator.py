@@ -2,7 +2,7 @@ from datetime import date
 
 from bank_account import BankAccount
 from budget import Budget, BudgetTypes
-from user import User, UserTypes #, UserAngel #, TroubleMaker, Rebel
+from user import User, UserTypes
 
 
 class Moderator:
@@ -54,10 +54,12 @@ class Moderator:
                         'Budget for Games and Entertainment: ')))
                 self.budgets[BudgetTypes.MISCELLANEOUS] = Budget(
                     int(input('Budget for Miscellaneous: ')))
-                self.budgets[BudgetTypes.EATING_OUT] = Budget(int(input('Budget for '
-                                                                        'Eating out: ')))
-                self.budgets[BudgetTypes.CLOTHING_AND_ACCESSORIES] = Budget(int(input(
-                    'Budget for Clothing and Accessories: ')))
+                self.budgets[BudgetTypes.EATING_OUT] = Budget(
+                    int(input('Budget for '
+                              'Eating out: ')))
+                self.budgets[BudgetTypes.CLOTHING_AND_ACCESSORIES] = Budget(
+                    int(input(
+                        'Budget for Clothing and Accessories: ')))
             except ValueError:
                 print('Try again :) (bad value)')
                 continue
@@ -72,7 +74,7 @@ class Moderator:
         """
         ba = BankAccount("Account number here", "Bank name there", 400)
         user = User("Nick McGrath", date(1996, 4, 9), ba,
-                    **UserTypes.TROUBLE_MAKER.value)
+                    **UserTypes.REBEL.value)
         self.user = user
         self.budgets[BudgetTypes.GAMES_AND_ENTERTAINMENT] = Budget(100)
         self.budgets[BudgetTypes.MISCELLANEOUS] = Budget(100)
@@ -105,9 +107,7 @@ class Moderator:
         print(self.user.bank_account)
         print('----< Transactions  >---- ')
         for budget in BudgetTypes:
-            # print(budget)
             self.view_budget(budget)
-
 
     def notify(self):
         """
@@ -125,55 +125,53 @@ class Moderator:
                       f' {budgetKey} used!')
                 print(self.budgets[budgetKey])
 
-    def transaction(self, amount, type, shop):
+    def transaction(self, amount, budgetType, shop):
         """
         Attempt a transaction.
         :param amount: float, negative if withdraw
-        :param type BudgetType
+        :param budgetType BudgetType
         :return: string, Transaction response
         """
-        # trans_check = self.user.bank_account.trans_check(amount)
-        # # if transaction fails, return failed reason
-        # if trans_check != True:
-        #     return 'transaction check failed in back account'
-        trans_check = self._trans_check(amount, type)
+        trans_check = self._trans_check(amount, budgetType)
         if trans_check != True:
             return trans_check
         else:
-            self.budgets[type].add_transaction(amount, shop)
-            self.user.bank_account.trans(amount)
-            self._trans_complete(amount, type)
+            self.budgets[budgetType].add_transaction(amount, shop)
+            self._trans_complete(amount, budgetType)
             return 'Transaction Success'
 
-    def _trans_check(self, amount, type):
-        if self.budgets[type].balance < self.budgets[
-            type].total * self.user.notify_amount_percent:
+    def _trans_check(self, amount, budgetType):
+        if self.budgets[budgetType].balance < \
+                self.budgets[budgetType].total \
+                * self.user.notify_amount_percent:
             print(
-                f'More than {self.user.notify_amount_percent * 100}% of {type} used!')
-            print(self.budgets[type])
-        if self.user.locked == True:
+                f'More than {self.user.notify_amount_percent * 100}% of {budgetType} used!')
+            print(self.budgets[budgetType])
+        if self.user.locked:
             return 'Your account is locked BUD >:D'
-        if self.budgets[type].locked == True:
+        if self.budgets[budgetType].locked:
             return 'Transaction Failed due to budget being locked!'
-        if not self.user.bank_account.trans_check(amount):
+        if not self.user.bank_account.balance_check(amount):
             return 'Transaction Failed due to lack of funds!'
         return True
 
-    def _trans_complete(self, amount, type):
+    def _trans_complete(self, amount, budgetType):
         """
         Completes the transfer, Gets locked out if they exceed it by
         100%, if they exceed their budget in 2 or more categories then
         they get locked out fo there account completely.
         :param amount: float
-        :param type: BudgetType
+        :param budgetType: BudgetType
         """
+        self.user.bank_account.purchase(amount)
         if hasattr(self.user, 'lock_budget_percent'):
             if 1 - self.user.lock_budget_percent >= \
-                    self.budgets[type].balance / self.budgets[type].total:
-                self.budgets[type].locked = True
+                    self.budgets[budgetType].balance / self.budgets[
+                budgetType].total:
+                self.budgets[budgetType].locked = True
         sum_acct_locked = 0
-        for bud in self.budgets.values():
-            if bud.locked == True:
+        for budget in self.budgets.values():
+            if budget.locked == True:
                 sum_acct_locked += 1
             if hasattr(self.user, 'lock_account_amount'):
                 if sum_acct_locked >= self.user.lock_account_amount:
