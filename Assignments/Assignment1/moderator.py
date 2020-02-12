@@ -111,8 +111,8 @@ class Moderator:
 
     def notify(self):
         """
-        Notifies user if budget is exceeded or more than 90% of a budget is
-        used.
+        Notifies user if budget is exceeded or more than their specified
+        notification amount.
         """
         print('----< Notifications >---- ')
         for budgetKey in self.budgets.keys():
@@ -125,53 +125,59 @@ class Moderator:
                       f' {budgetKey} used!')
                 print(self.budgets[budgetKey])
 
-    def transaction(self, amount, budgetType, shop):
+    def transaction(self, amount, budget_type, shop):
         """
         Attempt a transaction.
         :param amount: float, negative if withdraw
-        :param budgetType BudgetType
+        :param budget_type BudgetType
         :return: string, Transaction response
         """
-        trans_check = self._trans_check(amount, budgetType)
+        trans_check = self._trans_check(amount, budget_type)
         if trans_check != True:
             return trans_check
         else:
-            self.budgets[budgetType].add_transaction(amount, shop)
-            self._trans_complete(amount, budgetType)
+            self.budgets[budget_type].add_transaction(amount, shop)
+            self._trans_complete(amount, budget_type)
             return 'Transaction Success'
 
-    def _trans_check(self, amount, budgetType):
-        if self.budgets[budgetType].balance < \
-                self.budgets[budgetType].total \
+    def _trans_check(self, amount, budget_type):
+        """
+        Helper method to check for any transaction flags.
+        :param amount: float
+        :param budget_type: BudgetType
+        :return: True if good otherwise reason for failure
+        """
+        if self.budgets[budget_type].balance < \
+                self.budgets[budget_type].total \
                 * self.user.notify_amount_percent:
             print(
-                f'More than {self.user.notify_amount_percent * 100}% of {budgetType} used!')
-            print(self.budgets[budgetType])
+                f'More than {self.user.notify_amount_percent * 100}% of {budget_type} used!')
+            print(self.budgets[budget_type])
         if self.user.locked:
             return 'Your account is locked BUD >:D'
-        if self.budgets[budgetType].locked:
+        if self.budgets[budget_type].locked:
             return 'Transaction Failed due to budget being locked!'
         if not self.user.bank_account.balance_check(amount):
             return 'Transaction Failed due to lack of funds!'
         return True
 
-    def _trans_complete(self, amount, budgetType):
+    def _trans_complete(self, amount, budget_type):
         """
         Completes the transfer, Gets locked out if they exceed it by
         100%, if they exceed their budget in 2 or more categories then
         they get locked out fo there account completely.
         :param amount: float
-        :param budgetType: BudgetType
+        :param budget_type: BudgetType
         """
         self.user.bank_account.purchase(amount)
         if hasattr(self.user, 'lock_budget_percent'):
             if 1 - self.user.lock_budget_percent >= \
-                    self.budgets[budgetType].balance / self.budgets[
-                budgetType].total:
-                self.budgets[budgetType].locked = True
+                    self.budgets[budget_type].balance \
+                    / self.budgets[budget_type].total:
+                self.budgets[budget_type].locked = True
         sum_acct_locked = 0
         for budget in self.budgets.values():
-            if budget.locked == True:
+            if budget.locked:
                 sum_acct_locked += 1
             if hasattr(self.user, 'lock_account_amount'):
                 if sum_acct_locked >= self.user.lock_account_amount:

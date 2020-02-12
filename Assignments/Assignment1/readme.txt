@@ -5,4 +5,4 @@ features (the ones specified in this assignment and any extra features) that
 you may or may not have implemented. This will help me keep an eye out for
 them as I grade your work.
 
-To run the program launch from fam.py file.
+To run the program run main() from the fam module.

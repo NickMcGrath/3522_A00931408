@@ -1,6 +1,7 @@
 class BankAccount:
     """
-    Contains bank account attributes.
+    Contains bank account attributes including: Account Number, Account Name,
+    and Balance.
     """
 
     def __init__(self, account_num, account_name, balance):
@@ -21,8 +22,16 @@ class BankAccount:
                f' {self.account_num}, Balance: {self.balance}'
 
     def balance_check(self, amount):
+        """
+        Checks if the amount will leave the balance positive.
+        :param amount: float
+        :return: bool, True if account will still be positive
+        """
         return amount + self.balance >= 0
 
     def purchase(self, amount):
+        """
+        Completes a purchase by updating the balance.
+        :param amount: float
+        """
         self.balance += amount
-

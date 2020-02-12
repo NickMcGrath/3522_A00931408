@@ -34,6 +34,7 @@ class Budget:
         """
         Adds a transaction to the budget.
         :param amount: float
+        :param shop: string
         :param date_time: datetime
         :return: bool, if transaction was added
         """
@@ -42,9 +43,11 @@ class Budget:
                                              self.balance))
 
     def __str__(self):
+        """string representation of budget"""
         return f'Amount Spent: {self.total - self.balance}, Balance: ' \
                f'{self.balance}, Total allocated: {self.total}, ' \
                f'locked: {self.locked}'
+
 
 class Transaction:
     """

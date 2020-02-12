@@ -2,6 +2,10 @@ import enum
 
 
 class UserTypes(enum.Enum):
+    """
+    Enum who's keys are the settings parameter applying flags to the user as
+    an account type.
+    """
     ANGLE = {'notify_amount_percent': .9}
     TROUBLE_MAKER = {'notify_amount_percent': .75,
                      'lock_budget_percent': 1.2}
@@ -9,10 +13,10 @@ class UserTypes(enum.Enum):
              'lock_account_amount': 2}
 
 
-class User():
+class User:
     """
-    User models a user of FAM software. Users have transaction checks and
-    notification checks.
+    User models a user of FAM software. Users have attributes that act as
+    flags for conducting a transaction.
     """
 
     def __init__(self, name, dob, bank_account, **settings):
@@ -21,6 +25,7 @@ class User():
         :param name: string
         :param dob: date
         :param bank_account: BankAccount
+        :param **settings: UserType enum value
         """
         self.name = name
         self.dob = dob
@@ -31,6 +36,7 @@ class User():
             setattr(self, key, value)
 
 # sea of wasted work :'(
+# it was a good learning experience
 
 # class UserAngel(User):
 #     """

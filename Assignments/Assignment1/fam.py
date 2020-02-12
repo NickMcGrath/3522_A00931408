@@ -56,7 +56,6 @@ class Fam():
             print('2: Clothing and Accessories')
             print('3: Eating Out')
             print('4: Miscellaneous')
-            option = -1
             while True:
                 try:
                     option = int(input('> '))
@@ -78,10 +77,11 @@ class Fam():
         print('2: Clothing and Accessories')
         print('3: Eating Out')
         print('4: Miscellaneous')
-        option = -1
         while True:
             try:
                 option = int(input('> '))
+                if option == 0:
+                    return
                 amount = -float(input('How many Bones?:'))
                 if amount >= 0:
                     raise ValueError
@@ -93,16 +93,30 @@ class Fam():
                 continue
             else:
                 break
-        if option == 0:
-            return
 
 
 def main():
-    """Program Driver."""
+    """
+    Program Driver.
+    Adds a moderator to the fam class and sets up a user
+    """
     driver = Fam(Moderator())
 
-    driver.moderator.load_test_user()
-    # driver.moderator.load_user()
+    while True:
+        try:
+            option = input('Test user? (y/n)')
+            if option.lower() == 'y':
+                driver.moderator.load_test_user()
+            elif option.lower() == 'n':
+                driver.moderator.load_user()
+            else:
+                continue
+
+        except ValueError:
+            print('Please check parameters!')
+            continue
+        else:
+            break
     driver.main_menu()
 
 
