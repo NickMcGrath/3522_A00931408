@@ -217,12 +217,12 @@ class IDCard(Expirable, Card):
         return formatted
 
 
-# TODO: Balance Card ABC here
-class BalanceCard(Card, ABC.abc):
+class BalanceCard(Card, ABC):
     """
     A BalanceCard represents a card with a balance. BalanceCard is
     abstract and needs to be inherited to be instantiated.
     """
+
     def __init__(self, balance, **kwargs):
         """
         Initialize a BalanceCard.
@@ -236,15 +236,15 @@ class BalanceCard(Card, ABC.abc):
         self._balance = balance
 
     def __str__(self):
-        return f'Balance Card with Balance of: {self._balance}, {super()}'
+        return f'Balance Card with Balance of: {self._balance}, {super().__str__()}'
 
 
-# TODO: TransitCard
 class TransitCard(BalanceCard):
     """
     A Transit card Represents a transit card used for buses.
     Transit cards have a balance that must be above 0.
     """
+
     def __init__(self, name, email, monthly_pass, **kwargs):
         """
         Initialize a TransitCard.
@@ -274,7 +274,8 @@ class TransitCard(BalanceCard):
 
     def __str__(self):
         return f'TransitCard with contact details: {self.contact_details}, ' \
-               f'Monthly pass: {self.has_monthly_pass}, Card details: {super()}'
+               f'Monthly pass: {self.has_monthly_pass}, Card details: ' \
+               f'{super().__str__()}'
 
     @classmethod
     def get_fields(cls):
@@ -296,6 +297,7 @@ class GiftCard(BalanceCard):
     A GiftCard Represents a gift card used for in store purchases only.
     Gift cards have a balance that must be above 0.
     """
+
     def __init__(self, **kwargs):
         """
         Initialize a GiftCard.
@@ -304,7 +306,7 @@ class GiftCard(BalanceCard):
         complex super() MRO calls. Usually contains the attributes of
         other interfaces that have been implemented.
         """
-        super().__init__(**kwargs)
+        super().__init__(0, **kwargs)
 
     def validate_card(self):
         """
@@ -318,7 +320,7 @@ class GiftCard(BalanceCard):
         return balance_check and letter_check
 
     def __str__(self):
-        return f'GiftCard Card details: {super()}'
+        return f'GiftCard Card details: {super().__str__()}'
 
     @classmethod
     def get_fields(cls):
