@@ -40,6 +40,8 @@ class Fam():
                 self.transactions_by_budget_menu()
             elif option == 4:
                 self.moderator.view_bank_account_details()
+            elif option == 0:
+                break
             else:
                 print('Didnt get that, Please enter a option (integer value)')
         print('Thanks for using Dank Accounting')

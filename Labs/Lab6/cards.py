@@ -219,31 +219,112 @@ class IDCard(Expirable, Card):
 
 # TODO: Balance Card ABC here
 class BalanceCard(Card, ABC.abc):
+    """
+    A BalanceCard represents a card with a balance. BalanceCard is
+    abstract and needs to be inherited to be instantiated.
+    """
     def __init__(self, balance, **kwargs):
+        """
+        Initialize a BalanceCard.
+        :param balance: float
+        :param kwargs: a dictionary of named arguments and values. This
+        is to provide support in the event of multiple inheritance and
+        complex super() MRO calls. Usually contains the attributes of
+        other interfaces that have been implemented.
+        """
         super().__init__(**kwargs)
         self._balance = balance
+
+    def __str__(self):
+        return f'Balance Card with Balance of: {self._balance}, {super()}'
 
 
 # TODO: TransitCard
 class TransitCard(BalanceCard):
+    """
+    A Transit card Represents a transit card used for buses.
+    Transit cards have a balance that must be above 0.
+    """
     def __init__(self, name, email, monthly_pass, **kwargs):
+        """
+        Initialize a TransitCard.
+        :param name: a string
+        :param email: a string
+        :param monthly_pass: a bool
+        :param kwargs: a dictionary of named arguments and values. This
+        is to provide support in the event of multiple inheritance and
+        complex super() MRO calls. Usually contains the attributes of
+        other interfaces that have been implemented.
+        """
         self.has_monthly_pass = monthly_pass
-        self.contact_details = ContactDetails()
-        self.contact_details.name = name;
-        self.contact_details.email = email;
+        self.contact_details = ContactDetails(name=name, email=email)
+        super().__init__(**kwargs)
 
     def validate_card(self):
         """
         To validate a TransitCard, it must have a balance ≥ 0 and
         it's card_id must begin with the letter 'T' and be followed by
         digits
+        :return: bool True if valid
+
         """
         balance_check = self._balance >= 0
         letter_check = self.card_id[0] == 'T' and self.card_id[1:].isdigit()
         return balance_check and letter_check
-    def __str__(self):
-        return f''
 
-    # TODO: GiftCard
+    def __str__(self):
+        return f'TransitCard with contact details: {self.contact_details}, ' \
+               f'Monthly pass: {self.has_monthly_pass}, Card details: {super()}'
+
+    @classmethod
+    def get_fields(cls):
+        """
+        Returns a dictionary of attributes and their string
+        representations to allow a Menu class to dynamically initialize
+        the class using kwargs.
+        :return: bool True if valid
+        """
+        fields = super().get_fields()
+        fields["name"] = "Name"
+        fields["email"] = "Email"
+        fields["has_monthly_pass"] = "Has Monthly Pass"
+        return fields
+
+
 class GiftCard(BalanceCard):
-    pass
+    """
+    A GiftCard Represents a gift card used for in store purchases only.
+    Gift cards have a balance that must be above 0.
+    """
+    def __init__(self, **kwargs):
+        """
+        Initialize a GiftCard.
+        :param kwargs: a dictionary of named arguments and values. This
+        is to provide support in the event of multiple inheritance and
+        complex super() MRO calls. Usually contains the attributes of
+        other interfaces that have been implemented.
+        """
+        super().__init__(**kwargs)
+
+    def validate_card(self):
+        """
+        To validate a GiftCard it must have a balance ≥ 0, not be
+        expired and have a card_id hat begins with the letter 'G' and
+        be followed by digits.
+        :return: bool True if valid
+        """
+        balance_check = self._balance >= 0
+        letter_check = self.card_id[0] == 'G' and self.card_id[1:].isdigit()
+        return balance_check and letter_check
+
+    def __str__(self):
+        return f'GiftCard Card details: {super()}'
+
+    @classmethod
+    def get_fields(cls):
+        """
+        :return: Returns a dictionary of attributes and their string
+        representations to allow a Menu class to dynamically initialize
+        the class using kwargs.
+        """
+        return super().get_fields()
