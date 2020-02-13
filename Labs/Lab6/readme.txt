@@ -5,5 +5,6 @@
 2. How would you implement this system without using multiple inheritance?
 Describe the solution.
     - Each card would only implement from a card base
+    - can use composition instead
     - This would lead to a lot of code repeating because some methods can be
         be inherited instead of done again.
