@@ -160,8 +160,9 @@ class Card(ABC):
 
 class IDCard(Expirable, Card):
     """
-    An ID card here refers to a card issued by the government or a school
-    and has an ID that begins with the letter A followed by numbers.
+    An ID card here refers to a card issued by the government or a
+    school and has an ID that begins with the letter A followed by
+    numbers.
 
     This class impelemnts and inherits the Expirable interface and the
     Card base class.
@@ -233,10 +234,28 @@ class BalanceCard(Card, ABC):
         other interfaces that have been implemented.
         """
         super().__init__(**kwargs)
-        self._balance = balance
+        self._balance = float(balance)
 
     def __str__(self):
-        return f'Balance Card with Balance of: {self._balance}, {super().__str__()}'
+        """String representation of an instance."""
+        return f'Balance Card with Balance of: ' \
+               f'{self._balance}, {super().__str__()}'
+
+    @abstractmethod
+    def validate_card(self):
+        pass
+
+    @classmethod
+    @abstractmethod
+    def get_fields(cls):
+        """
+        :return: Returns a dictionary of attributes and their string
+        representations to allow a Menu class to dynamically initialize
+        the class using kwargs.
+        """
+        fields = super().get_fields()
+        fields["balance"] = "Card Balance"
+        return fields
 
 
 class TransitCard(BalanceCard):
@@ -250,13 +269,16 @@ class TransitCard(BalanceCard):
         Initialize a TransitCard.
         :param name: a string
         :param email: a string
-        :param monthly_pass: a bool
+        :param monthly_pass: a string 'yes' for True
         :param kwargs: a dictionary of named arguments and values. This
         is to provide support in the event of multiple inheritance and
         complex super() MRO calls. Usually contains the attributes of
         other interfaces that have been implemented.
         """
-        self.has_monthly_pass = monthly_pass
+        if monthly_pass.lower() == 'yes':
+            self.has_monthly_pass = True
+        else:
+            self.has_monthly_pass = False
         self.contact_details = ContactDetails(name=name, email=email)
         super().__init__(**kwargs)
 
@@ -273,7 +295,10 @@ class TransitCard(BalanceCard):
         return balance_check and letter_check
 
     def __str__(self):
-        return f'TransitCard with contact details: {self.contact_details}, ' \
+        """String representation of an instance."""
+        return f'TransitCard with contact details: ' \
+               f'Name: {self.contact_details.name},' \
+               f' email: {self.contact_details.email} ' \
                f'Monthly pass: {self.has_monthly_pass}, Card details: ' \
                f'{super().__str__()}'
 
@@ -288,7 +313,7 @@ class TransitCard(BalanceCard):
         fields = super().get_fields()
         fields["name"] = "Name"
         fields["email"] = "Email"
-        fields["has_monthly_pass"] = "Has Monthly Pass"
+        fields["monthly_pass"] = "Has Monthly Pass"
         return fields
 
 
@@ -306,7 +331,7 @@ class GiftCard(BalanceCard):
         complex super() MRO calls. Usually contains the attributes of
         other interfaces that have been implemented.
         """
-        super().__init__(0, **kwargs)
+        super().__init__(**kwargs)
 
     def validate_card(self):
         """
@@ -320,6 +345,7 @@ class GiftCard(BalanceCard):
         return balance_check and letter_check
 
     def __str__(self):
+        """String representation of an instance."""
         return f'GiftCard Card details: {super().__str__()}'
 
     @classmethod
@@ -329,4 +355,5 @@ class GiftCard(BalanceCard):
         representations to allow a Menu class to dynamically initialize
         the class using kwargs.
         """
-        return super().get_fields()
+        fields = super().get_fields()
+        return fields
