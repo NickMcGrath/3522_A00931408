@@ -6,7 +6,7 @@ class UserTypes(enum.Enum):
     Enum who's keys are the settings parameter applying flags to the user as
     an account type.
     """
-    ANGLE = {'notify_amount_percent': .9}
+    ANGEL = {'notify_amount_percent': .9}
     TROUBLE_MAKER = {'notify_amount_percent': .75,
                      'lock_budget_percent': 1.2}
     REBEL = {'notify_amount_percent': .5, 'lock_budget_percent': 1,

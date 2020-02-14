@@ -29,7 +29,7 @@ class Moderator:
 
                 # collect the info needed to create a User
                 user_values = []
-                user_values.append(input('Name: '));
+                user_values.append(input('Name: '))
                 print('Date of birth (using integer values):')
                 user_values.append(date(int(input('\tYear: ')), int(input(
                     '\tMonth: ')), int(input('\tDay: '))))
@@ -128,6 +128,7 @@ class Moderator:
     def transaction(self, amount, budget_type, shop):
         """
         Attempt a transaction.
+        :param shop:
         :param amount: float, negative if withdraw
         :param budget_type BudgetType
         :return: string, Transaction response
