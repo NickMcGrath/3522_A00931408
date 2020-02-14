@@ -317,7 +317,7 @@ class TransitCard(BalanceCard):
         return fields
 
 
-class GiftCard(BalanceCard):
+class GiftCard(Expirable, BalanceCard):
     """
     A GiftCard Represents a gift card used for in store purchases only.
     Gift cards have a balance that must be above 0.
