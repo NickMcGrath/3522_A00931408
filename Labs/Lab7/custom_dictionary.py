@@ -16,7 +16,8 @@ class CustomDictionary:
         with open(path, mode='r', encoding='utf-8') as definitions_file:
             def_file = definitions_file.read()
             split_def_file = def_file.split('--')
-            self.definitions = {d.split('\n').pop(0): d.split('\n')[1:] for d
+            self.definitions = {d.split('\n').pop(0): d.split('\n')[1:-1]
+                                for d
                                 in split_def_file}
             self.queries = []
             print(self.definitions)
@@ -41,7 +42,7 @@ class CustomDictionary:
             export_file.write(
                 '\n' + datetime.now().strftime("%d/%m/%Y %H:%M:%S") + '\n')
             for definition in self.queries:
-                export_file.write('--' + definition)
+                export_file.write('\n--' + definition)
                 for description in self.definitions[definition]:
                     export_file.write('\n' + description)
 
