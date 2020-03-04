@@ -75,7 +75,6 @@ class LibraryCatalogue:
         return results
 
     def load_items(self):
-        # TODO: Lab 8 Implementation
         item_factory = FactoryMapper.execute_factory_menu()
         item_generator = item_factory.get_next_item()
         for item in item_generator:
