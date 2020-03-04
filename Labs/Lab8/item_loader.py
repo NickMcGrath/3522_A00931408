@@ -11,7 +11,18 @@ from items import *
 
 
 class LibraryItemFactory(abc.ABC):
+    """
+    A Base Class for a library factory to extend. Contains method to get
+    items from the path provided.
+    """
+
     def __init__(self, path):
+        """
+        Initialize a factory with a path to the file needed to create a
+        factory item.
+        :param path: path to file containing content's needed to create
+        library items
+        """
         self.path = path
 
     @abc.abstractmethod
@@ -21,13 +32,23 @@ class LibraryItemFactory(abc.ABC):
         Reads the excel file and iterate over each row of the data
         frame. The details from these rows should be used to create and
         yield the corresponding Library Item.
-        :return:
+        :return: generator
         """
         pass
 
 
 class MangaFactory(LibraryItemFactory):
+    """
+    Manga Factory, creates Manga library items from file path provided.
+    """
     def get_next_item(self):
+        """
+        Generator.
+        Reads the excel file and iterate over each row of the data
+        frame. The details from these rows should be used to create and
+        yield the corresponding Manga item.
+        :return: generator
+        """
         excel_df = pandas.read_excel(self.path)
         for row in excel_df.iterrows():
             row_dic = row[1].to_dict()
@@ -35,7 +56,17 @@ class MangaFactory(LibraryItemFactory):
 
 
 class GameFactory(LibraryItemFactory):
+    """
+    Game Factory, creates Manga library items from file path provided.
+    """
     def get_next_item(self):
+        """
+        Generator.
+        Reads the excel file and iterate over each row of the data
+        frame. The details from these rows should be used to create and
+        yield the corresponding Game item.
+        :return: generator
+        """
         excel_df = pandas.read_excel(self.path)
         for row in excel_df.iterrows():
             row_dic = row[1].to_dict()
@@ -43,7 +74,17 @@ class GameFactory(LibraryItemFactory):
 
 
 class MovieFactory(LibraryItemFactory):
+    """
+    Movie Factory, creates Manga library items from file path provided.
+    """
     def get_next_item(self):
+        """
+        Generator.
+        Reads the excel file and iterate over each row of the data
+        frame. The details from these rows should be used to create and
+        yield the corresponding Movie item.
+        :return: generator
+        """
         excel_df = pandas.read_excel(self.path)
         for row in excel_df.iterrows():
             row_dic = row[1].to_dict()
