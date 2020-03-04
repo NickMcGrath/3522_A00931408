@@ -42,7 +42,7 @@ class GameFactory(LibraryItemFactory):
             yield Game(**row_dic)
 
 
-class MovieFactory:
+class MovieFactory(LibraryItemFactory):
     def get_next_item(self):
         excel_df = pandas.read_excel(self.path)
         for row in excel_df.iterrows():
@@ -59,9 +59,9 @@ class FactoryMapper:
 
     # TODO: Populate factory_map
     factory_map = {
-        0: MangaFactory,
-        1: GameFactory,
-        2: MovieFactory
+        1: MangaFactory,
+        2: GameFactory,
+        3: MovieFactory
     }
     """
     Factory map is a dictionary of type {int, FactoryClass}
