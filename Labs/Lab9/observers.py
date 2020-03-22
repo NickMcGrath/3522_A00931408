@@ -134,7 +134,6 @@ class TableGenerator:
         table.field_names = labels
         for i in range(0, len(data[0])):
             table.add_row([data[0][i], data[1][i]])
-        print(table)
-        output_name += '.txt'
+        output_name += '_table.txt'
         with open(output_name, 'w') as file:
             file.write(str(table))

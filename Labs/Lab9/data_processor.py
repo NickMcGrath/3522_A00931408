@@ -55,13 +55,13 @@ def main() -> int:
     :return: int
     """
     data_processor = DataProcessor()
-    line_graph_oberserver = LineGraph('--', False, 'yellow')
-    bar_graph_obserserver = BarGraph(False, 'black', 'red')
+    line_graph_observer = LineGraph('--', False, 'yellow')
+    bar_graph_observer = BarGraph(False, 'black', 'red')
     table_generator_observer = TableGenerator('left')
-    data_processor.subscribe_callbacks(line_graph_oberserver,
-                                       bar_graph_obserserver,
+    data_processor.subscribe_callbacks(line_graph_observer,
+                                       bar_graph_observer,
                                        table_generator_observer)
-    data_processor.process_data('Temperatures.xlsx', 'temp')
+    data_processor.process_data('ClassDistribution.xlsx', 'temp')
 
 
 if __name__ == '__main__':

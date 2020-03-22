@@ -1,0 +1,10 @@
++---------------------------+
+|     ClassDistribution     |
++----------------+----------+
+|    Subjects    | Students |
++----------------+----------+
+|  Programming   |    90    |
+|      Math      |    45    |
+|  Digital Arts  |    30    |
+| Technical Arts |    28    |
++----------------+----------+
