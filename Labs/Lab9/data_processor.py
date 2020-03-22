@@ -1,13 +1,31 @@
+"""
+This module contains a program that loads an excel file and creates charts
+from it.
+"""
 import pandas
 
 from Labs.Lab9.observers import *
 
 
 class DataProcessor:
+    """
+    Class DataProcessors is the core that observers can subscribe to.
+    If the internal state of the core changes, the all the observers
+    get notified.
+    """
+
     def __init__(self) -> None:
+        """
+        Initialize a DataProcessor with an empty callback list.
+        """
         self.callbacks = []
 
     def subscribe_callbacks(self, *args: list) -> None:
+        """
+        Accepts a variable number of callback objects and adds them to the
+        list of callbacks.
+        :param args: list of observers.
+        """
         for item in args:
             self.callbacks.append(item)
 
@@ -30,6 +48,12 @@ class DataProcessor:
 
 
 def main() -> int:
+    """
+    Generates DataProcessor object, creates observer objects, subscribes
+    them to be called, calls process_data method to generate charts from
+    excel document.
+    :return: int
+    """
     data_processor = DataProcessor()
     line_graph_oberserver = LineGraph('--', False, 'yellow')
     bar_graph_obserserver = BarGraph(False, 'black', 'red')
