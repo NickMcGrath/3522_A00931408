@@ -66,7 +66,7 @@ class LineGraph(Graph):
         plt.title(title)
         plt.xlabel(labels[0])
         plt.ylabel(labels[1])
-        plt.plot(data, self.line_style)
+        plt.plot(data[0], data[1], self.line_style)
         output_name += '_line'
         plt.savefig(output_name)
 

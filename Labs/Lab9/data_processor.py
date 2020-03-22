@@ -40,9 +40,9 @@ class DataProcessor:
         df = pandas.read_excel(excel_file)
         title = excel_file.split('.')[0]
         data = []
-        for column in df.columns.ravel():
-            data.append(pandas.Series(df[column]))
         labels = df.columns.ravel()
+        for column in labels:
+            data.append(pandas.Series(df[column]))
         for observer in self.callbacks:
             observer(title, data, labels, output_title)
 
