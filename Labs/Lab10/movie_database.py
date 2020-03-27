@@ -145,6 +145,3 @@ class MovieDatabase:
                           language=row[3], release_year=row[4])
             movie_list.append(movie)
         return movie_list
-
-if __name__ == '__main__':
-    pass
