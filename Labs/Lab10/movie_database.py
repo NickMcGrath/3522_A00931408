@@ -63,8 +63,9 @@ class MovieDatabase:
         self.cursor = None
         self.connect()
 
-        for movie in movies:
-            self.insert(movie)
+        if movies is not None:
+            for movie in movies:
+                self.insert(movie)
 
     def connect(self):
         """
