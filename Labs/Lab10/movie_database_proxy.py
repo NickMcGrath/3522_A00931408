@@ -71,11 +71,11 @@ class MovieDatabaseProxy:
         """
         if self.access_level.value > 1:
             raise InvalidPermission()
-        self.movie_database.insert(movie)
+        result = self.movie_database.insert(movie)
         # note this is questionable. because there is no return from
         # insert you cant tell what id it will be set to. And calling
         # update_cache is a lot of resources.
-        movie.key = self.cache[len(self.cache) - 1].key + 1
+        movie.key = result.key
         self.cache.append(movie)
 
     def view(self) -> list:
@@ -127,7 +127,16 @@ class MovieDatabaseProxy:
                     and (release_year == movie.release_year
                          or release_year == 0):
                 results.append(movie)
-        return results
+        if len(results) > 0:
+            return results
+        else:
+            print('in else')
+            results = self.movie_database.search(title, director, language,
+                                                 release_year)
+            # no need to if check because wrapee will return a empty list if
+            # none
+            self.cache.extend(results)
+            return results
 
 
 def main():
@@ -142,22 +151,37 @@ def main():
             Movie("La La Land", "Damien Chazelle", 2016, "ENG", 2),
             Movie("Avengers Endgame", "Anthony Russo", 2019, "ENG", 3)
         ]
-        account_level = int(input("Access Level? 1: admin, 2: member > "))
-        mdp = MovieDatabaseProxy(UserAccessEnum(account_level),
-                                 "myDatabase")
-        mdp.connect()
+        # create 2 proxies
+        account_level = int(input("Access Level proxy1? 1: admin, 2: member "
+                                  "> "))
+        proxy1 = MovieDatabaseProxy(UserAccessEnum(account_level),
+                                    "myDatabase")
+        account_level = int(input("Access Level proxy2? 1: admin, 2: member "
+                                  "> "))
+        proxy2 = MovieDatabaseProxy(UserAccessEnum(account_level),
+                                    "myDatabase")
 
+        proxy1.connect()
+        proxy2.connect()
+
+        # allow for terminal testing
         while True:
             print('-' * 17)
             print('options:')
-            print('0: view')
-            print('1: search')
-            print('2: insert')
-            print('3: delete')
-            print('exit: exit')
+            print('"0": view')
+            print('"1": search')
+            print('"2": insert')
+            print('"3": delete')
+            print('"exit": exit')
             option = input()
+
+            if option == 'exit':
+                break
+
+            proxy = proxy1 if input('proxy? ("1" or "2") > ') == '1' \
+                else proxy2
             if option == '0':
-                for movie in mdp.view():
+                for movie in proxy.view():
                     print('-' * 17)
                     print(movie)
             elif option == '1':
@@ -168,7 +192,7 @@ def main():
                     year = int(input('release year? > '))
                 except ValueError:
                     year = 0
-                search = mdp.search(title, director, lang, year)
+                search = proxy.search(title, director, lang, year)
                 for movie in search:
                     print('-' * 17)
                     print(movie)
@@ -176,16 +200,17 @@ def main():
                 movie = Movie(input('title? > '), input('director? > '),
                               int(input('release year? > ')),
                               input('lang? > '))
-                mdp.insert(movie)
+                proxy.insert(movie)
             elif option == '3':
-                mdp.delete(int(input('id to remove > ')))
-            elif option == 'exit':
-                break
+                proxy.delete(int(input('id to remove > ')))
 
-        mdp.close_connection()
+        proxy1.close_connection()
+        proxy2.close_connection()
+    # catch if user is trying to access functions they should not
     except InvalidPermission:
         print('Not enough permission buckaroo')
-        mdp.close_connection()
+        proxy1.close_connection()
+        proxy2.close_connection()
 
 
 if __name__ == '__main__':
