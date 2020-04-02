@@ -144,6 +144,7 @@ class MovieDatabase:
 
         self.cursor.execute(
             "SELECT * FROM movies WHERE title=? AND director=? "
+            ""
             "AND language=? AND release_year=?",
             (title, director, language, release_year))
         rows = self.cursor.fetchall()

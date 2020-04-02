@@ -17,6 +17,7 @@ class UserAccessEnum(Enum):
     Enum representing levels of permissions. note lower level higher
     permission
     """
+
     ADMIN = 1
     MEMBER = 2
 
