@@ -1,11 +1,15 @@
+"""
+This module is for showing you can use the data from a commmandline to
+make an object.
+"""
 import argparse
-
-"""
-Request has the values needed to make a request to get pokemon data.
-"""
 
 
 class Request:
+    """
+    Request has the values needed to make a request to get pokemon data.
+    """
+
     def __init__(self, mode: str, input_data: str, expanded: bool,
                  input_file: str = None, output_file: str = None):
         """

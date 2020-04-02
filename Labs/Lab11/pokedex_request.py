@@ -1,12 +1,29 @@
+"""
+This module is for showing that Moves can be generated using aiohttp.
+"""
+
 import aiohttp
 import asyncio
-import json
 
 
 class Moves:
+    """Moves represents the moves of a specific pokemon."""
+
     def __init__(self, name: str, id_: int, generation: str, accuracy: int,
                  pp: int, power: int, type_: str, damage_class: str,
                  effect_short: str):
+        """
+        Initialize moves.
+        :param name: str
+        :param id_: int
+        :param generation: str
+        :param accuracy: int
+        :param pp: int
+        :param power: int
+        :param type_: str
+        :param damage_class: str
+        :param effect_short: str
+        """
         self.name = name
         self.id = id_
         self.generation = generation
@@ -19,14 +36,20 @@ class Moves:
 
     def __str__(self):
         """Returns the current state of the Move"""
-        return f'current state of Request={str(vars(self))}'
+        return f'current state of Moves={str(vars(self))}'
 
 
 class APIClass:
     @classmethod
     async def get_move(cls, url: str, session: aiohttp.ClientSession) -> dict:
+        """
+        Creates and returns a Move object from url.
+        :param url: the url containing a json containing move values
+        :param session: an aiohttp ClientSession
+        :return: Move object
+        """
         response = await session.request(method='GET', url=url)
-        # "Read response’s body as JSON, return dict .json()"
+        # " '.json()' : Read response’s body as JSON, return dict"
         json_response = await response.json()
         a_move = Moves(
             name=json_response['name'],
@@ -38,13 +61,17 @@ class APIClass:
             type_=json_response['type']['name'],
             damage_class=json_response['damage_class']['name'],
             effect_short=json_response['effect_entries'][0]['short_effect']
-
         )
 
         return a_move
 
     @classmethod
-    async def process_requests(cls, id_list: list):
+    async def process_move_requests(cls, id_list: list):
+        """
+        Processes and obtains move objects obtained from the list.
+
+        :param id_list: list of move ids
+        """
         url = 'https://pokeapi.co/api/v2/move/{}'
         async with aiohttp.ClientSession() as session:
             list_urls = [url.format(req_id) for req_id in id_list]
@@ -56,9 +83,16 @@ class APIClass:
 
 
 def main():
+    """
+    Creates Moves from a list of move ids.
+    :return: int
+    """
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
-    response = loop.run_until_complete(APIClass.process_requests([1, 2]))
+
+    list_o_move_ids = [1, 2, 3, 4]
+    response = loop.run_until_complete(
+        APIClass.process_move_requests(list_o_move_ids))
     # print(response)
     # print(type(response))
 
